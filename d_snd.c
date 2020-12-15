@@ -1,13 +1,18 @@
 // wengwengweng
 
+// TODO: convert sample rate to 44100
+
 #include <stdio.h>
 #include <stdint.h>
 #include <stb_vorbis.c>
 
+#define HEADER_SIZE \
+	sizeof(uint32_t)
+
 typedef struct {
 	uint32_t num_frames;
 	int16_t *frames;
-} d_snd;
+} d_snd_bin;
 
 int main(int argc, char **argv) {
 
@@ -33,17 +38,13 @@ int main(int argc, char **argv) {
 
 	free(frames);
 
-	d_snd snd = (d_snd) {
+	d_snd_bin snd = (d_snd_bin) {
 		.frames = frames_mono,
 		.num_frames = num_frames_mono,
 	};
 
-	int header_size =
-		sizeof(uint32_t) // num_frames
-		;
-
 	FILE *f = fopen(argv[2], "wb");
-	fwrite(&snd, header_size, 1, f);
+	fwrite(&snd, HEADER_SIZE, 1, f);
 	fwrite(snd.frames, sizeof(int16_t), snd.num_frames, f);
 	fclose(f);
 
