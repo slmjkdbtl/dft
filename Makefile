@@ -3,25 +3,26 @@
 CC := clang
 CFLAGS += -Iext
 PREFIX := /usr/local
+TARGETS := dimg dsnd dfnt
 
 .PHONY: all
-all: dimg dsnd
+all: dimg dsnd dfnt
 
-dimg: d_img.c
-	$(CC) $(CFLAGS) d_img.c -o dimg
-
-dsnd: d_snd.c
-	$(CC) $(CFLAGS) d_snd.c -o dsnd
+%: %.c
+	$(CC) $(CFLAGS) $^ -o $@
 
 .PHONY: install
-install: dimg dsnd
+install: dimg dsnd dfnt
 	install dimg $(PREFIX)/bin
 	install dsnd $(PREFIX)/bin
+	install dfnt $(PREFIX)/bin
 
 .PHONY: clean
-clean: dimg dsnd
-	rm dimg
-	rm dsnd
-	rm *.dimg
-	rm *.dsnd
+clean:
+	rm -f dimg
+	rm -f dsnd
+	rm -f dfnt
+	rm -f *.dimg
+	rm -f *.dsnd
+	rm -f *.dfnt
 
